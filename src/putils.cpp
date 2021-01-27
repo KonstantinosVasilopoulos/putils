@@ -248,3 +248,116 @@ void List<T>::insert(int index, T value)
 
     size++;
 }
+
+template<typename K, typename V>
+HashNode<K, V>::HashNode()
+{
+
+}
+
+template<typename K, typename V>
+HashNode<K, V>::HashNode(K key, V value)
+{
+    this->key = key;
+    this->value = value;
+}
+
+template<typename K, typename V>
+HashNode<K, V>::~HashNode()
+{
+
+}
+
+template<typename K, typename V>
+int HashMap<K, V>::getBucketIndex(K key) const
+{
+    std::size_t hashCode = std::hash<K>{}(key);
+    int bucketIndex = hashCode & (size - 1);
+    return bucketIndex;
+}
+
+template<typename K, typename V>
+HashMap<K, V>::HashMap()
+{
+    size = 16;
+}
+
+template<typename K, typename V>
+HashMap<K, V>::~HashMap()
+{
+
+}
+
+template<typename K, typename V>
+int HashMap<K, V>::getSize() const
+{
+    return size;
+}
+
+template<typename K, typename V>
+void HashMap<K, V>::put(K key, V value)
+{
+    // Create a new node
+    HashNode<K, V> *node = new HashNode<K, V>(key, value);
+
+    // Find the index for the node and add it to its bucket
+    int bucketIndex = getBucketIndex(key);
+    buckets[bucketIndex].append(*node);
+}
+
+template<typename K, typename V>
+V HashMap<K, V>::get(K key) const
+{
+    int bucketIndex = getBucketIndex(key);
+
+    // Search all nodes in the bucket for the key
+    for (int i = 0; i < buckets[bucketIndex].getSize(); i++)
+    {
+        if (key == buckets[bucketIndex][i].key)
+            return buckets[bucketIndex][i].value;
+    }
+
+    // No such element found. Throw exception.
+    std::cout << "No such element exception" << std::endl;
+    exit(-1);
+}
+
+template<typename K, typename V>
+void HashMap<K, V>::remove(K key)
+{
+    int bucketIndex = getBucketIndex(key);
+    for (int i = 0; i < buckets[bucketIndex].getSize(); i++)
+    {
+        if (key == buckets[bucketIndex][i].key)
+        {
+            buckets[bucketIndex].remove(i);
+            break;
+        }
+    }
+}
+
+template<typename K, typename V>
+bool HashMap<K, V>::containsKey(K key) const
+{
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < buckets[i].getSize(); j++)
+        {
+            if (key == buckets[i][j].key) return true;
+        }
+    }
+
+    return false;
+}
+
+int main()
+{
+    HashMap<char, int> dict;
+    dict.put('a', 10);
+    dict.put('d', 34);
+    dict.put('k', 1);
+    dict.remove('a');
+    std::cout << dict.containsKey('k') << std::endl;
+
+    return 0;
+}

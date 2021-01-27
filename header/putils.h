@@ -43,4 +43,32 @@ public:
     void insert(int index, T value);
 };
 
+template<typename K, typename V>
+class HashNode
+{
+public:
+    K key;
+    V value;
+    HashNode();
+    HashNode(K key, V value);
+    ~HashNode();
+};
+
+template<typename K, typename V>
+class HashMap
+{
+    int size;
+    List<HashNode<K, V>> buckets[16];
+    int getBucketIndex(K key) const;
+
+public:
+    HashMap();
+    ~HashMap();
+    int getSize() const;
+    void put(K key, V value);
+    V get(K key) const;
+    void remove(K key);
+    bool containsKey(K key) const;
+};
+
 #endif
