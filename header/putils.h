@@ -71,4 +71,27 @@ public:
     bool containsKey(K key) const;
 };
 
+template<typename T>
+class MinHeap
+{
+    T *head;
+    int size;
+    int capacity;
+    void resize();
+    int parent(int i) const;
+    int leftChild(int i) const;
+    int rightChild(int i) const;
+    void swap(int i, int j);
+    void heapifyDown(int i);
+
+public:
+    MinHeap();
+    ~MinHeap();
+    int getSize() const;
+    bool isEmpty() const;
+    void show() const;
+    void add(T value);
+    T pop();
+};
+
 #endif
